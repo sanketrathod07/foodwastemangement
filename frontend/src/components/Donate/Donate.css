@@ -1,0 +1,101 @@
+.donate-container {
+    max-height: 88vh;
+    overflow-y: auto;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+}
+
+.donate-form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    background-color: #f8f9fa;
+    /* Light background for contrast */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.donate-title {
+    color: rgb(31, 31, 31);
+    margin-bottom: 1rem;
+}
+
+.donate-form-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.donate-form-container form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    /* Reduced spacing */
+}
+
+.donate-form-container form label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+.donate-form-container form input,
+.donate-form-container form textarea,
+.donate-form-container form select {
+    width: 100%;
+    padding: 8px;
+    /* Reduced padding */
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.donate-form-container form input:focus,
+.donate-form-container form textarea:focus,
+.donate-form-container form select:focus {
+    outline: none;
+    border-color: #84fab0;
+    /* Highlight color */
+    box-shadow: 0 0 5px rgba(132, 250, 176, 0.5);
+}
+
+.donate-form-container form button {
+    background-color: #28a745;
+    /* Green for call-to-action */
+    color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.donate-form-container form button:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+}
+
+@media (max-width: 768px) {
+    .donate-form-container {
+        padding: 15px;
+    }
+
+    .donate-form-container h2 {
+        font-size: 20px;
+    }
+
+    .donate-form-container form {
+        gap: 10px;
+        /* Further reduced spacing for smaller screens */
+    }
+}

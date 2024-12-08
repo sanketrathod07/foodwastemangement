@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  backend:
+    image: ecoeats-backend:latest
+    build: ./backend
+    ports:
+      - "8022-8023:8022"
+    environment:
+      - PORT=8022
+      - URL=${URL}
+      - JWT_SECRET=${JWT_SECRET}
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"  
+        max-file: "3"    
+
+  frontend:
+    image: ecoeats-frontend:latest
+    build: ./frontend
+    ports:
+      - "3000-3001:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://loadbalancer/api
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  loadbalancer:
+    image: ecoeats-nginx:latest
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+      - frontend
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"  
+        max-file: "3"    
+
+volumes:
+  mongo_data:

@@ -1,0 +1,56 @@
+/* Full-page background */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 88vh;
+    background: url('https://source.unsplash.com/1920x1080/?food,recycling') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+}
+
+/* Header styling */
+.home-header {
+    margin-bottom: 30px;
+}
+
+.home-title {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.home-subtitle {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Banner container */
+.banner-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Cards for actions */
+.action-card {
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.action-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.action-card button {
+    width: 100%;
+}
