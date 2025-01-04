@@ -16,7 +16,7 @@ const ListOfFoodItems = ({ handleAddToCart }) => {
     const fetchData = async () => {
       try {
         // Fetch all restaurants
-        const response = await axios.get(`http://localhost:8022/api/restaurants`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants`);
         const restaurants = response.data.restaurants;
 
         // Find the restaurant with the matching ID
