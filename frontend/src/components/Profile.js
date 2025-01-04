@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import '../Profile.css';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import toast from 'react-hot-toast';
 
 function Profile() {
   const url = `${process.env.REACT_APP_API_URL}/api/users`;
@@ -19,7 +20,6 @@ function Profile() {
   const [userUpdate, setUpdate] = useState({
     userName: '',
     email: '',
-    dob: '',
     phoneNumber: '',
     address: '',
   });
@@ -58,6 +58,7 @@ function Profile() {
     e.preventDefault();
     try {
       await axios.put(`${url}/${user._id}`, userUpdate);
+      toast.success('User Updated!')
     } catch (error) {
       console.log(error);
     }
@@ -135,7 +136,7 @@ function Profile() {
               <Form.Control
                 type="text"
                 placeholder={user.userName}
-                value={user.userName}
+
                 onChange={handleChange}
                 id="userName"
               />
@@ -145,7 +146,7 @@ function Profile() {
               <Form.Control
                 type="email"
                 placeholder={user.email}
-                value={user.email}
+
                 onChange={handleChange}
                 id="email"
               />
@@ -156,7 +157,7 @@ function Profile() {
               <Form.Control
                 type="text"
                 placeholder={user.phoneNumber}
-                value={user.phoneNumber}
+
                 onChange={handleChange}
                 id="phoneNumber"
               />
@@ -166,7 +167,7 @@ function Profile() {
               <Form.Control
                 type="text"
                 placeholder={user.address}
-                value={user.address}
+
                 onChange={handleChange}
                 id="address"
               />

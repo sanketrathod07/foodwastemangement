@@ -10,10 +10,6 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    dob: {
-        type: Date,
-        required: true,
-    },
     phoneNumber: {
         type: String,
         required: true,

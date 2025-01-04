@@ -34,6 +34,7 @@ export default function ListOfRestaurants({ handleAddToCart }) {
     fetchData();
   }, []);
 
+
   if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
 
@@ -47,7 +48,7 @@ export default function ListOfRestaurants({ handleAddToCart }) {
           <h2>Donate Products</h2>
           {products.length > 0 ? (
             <div className="card-grid">
-              {products.map((foodItem) => (
+              {products.reverse().map((foodItem) => (
                 <FoodCardItem key={foodItem._id} foodItem={foodItem} handleAddToCart={handleAddToCart} />
               ))}
             </div>

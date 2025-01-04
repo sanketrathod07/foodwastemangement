@@ -78,7 +78,6 @@ function Customers() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                 <div>
                   <p>Email: {user.email}</p>
-                  <p>Date of birth: {new Date(user.dob).toLocaleDateString()}</p>
                   <p>Address: {user.address}</p>
                   <p>Phone number: {user.phoneNumber}</p>
                 </div>

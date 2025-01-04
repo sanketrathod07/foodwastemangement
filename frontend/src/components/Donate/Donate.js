@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { Spinner } from 'react-bootstrap'; // Importing Spinner component for loading indicator
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 export default function Donate() {
@@ -86,7 +87,7 @@ export default function Donate() {
                 }
             );
 
-            alert("Product added successfully!");
+            toast.success('Product Added to Site!')
 
             // Reset the form
             setFormData({

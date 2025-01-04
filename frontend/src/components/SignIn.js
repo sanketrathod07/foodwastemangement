@@ -4,6 +4,7 @@ import "../App.css";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from 'react-hot-toast';
 
 function SignIn() {
     const url = `${process.env.REACT_APP_API_URL}/api/signIn`;
@@ -20,16 +21,18 @@ function SignIn() {
             .then((response) => {
                 const token = response.data.token;
                 localStorage.setItem("token", token);
-                if (response.data.user.role === 'user') { navigate('/profile'); }
+                if (response.data.user.role === 'user') { navigate('/'); }
                 else { navigate('/users') }
             })
             .catch((error) => {
                 console.error("There was an error!", error);
             });
+
+        toast.success('Welcome to Food Waste Management!')
     };
 
     return (
-        <div style={{ height: '100%', width: '100%', backgroundSize: 'cover', backgroundPosition: 'center center' }}>
+        <div style={{ width: '100%', backgroundSize: 'cover', backgroundPosition: 'center center' }}>
             <MDBContainer fluid className="d-flex align-items-center justify-content-center bg-image" >
                 <div className="mask gradient-custom-3"></div>
                 <MDBCard className="m-5" style={{ maxWidth: "600px" }}>
@@ -43,6 +46,7 @@ function SignIn() {
                                 placeholder="Enter email"
                                 onChange={handleChange}
                                 id="email"
+                                style={{ display: 'flex', flexDirection: 'column-reverse' }}
                             />
                             <MDBInput
                                 wrapperClass="mb-4"
@@ -53,9 +57,16 @@ function SignIn() {
                                 onChange={handleChange}
                                 id="password"
                             />
-                            <MDBBtn className="mb-4 w-100 gradient-custom-4" size="lg" type="submit"> Sign In </MDBBtn>
+                            <MDBBtn
+                                style={{
+                                    minHeight: '2.8rem', // Use minHeight to prevent expansion
+                                    padding: '0.8rem', // Adjust padding as needed
+                                    transition: 'none', // Remove transition if any
+                                }}
+                                className="mb-4 w-100 gradient-custom-4 h-[2.8rem]" size="lg" type="submit" noRipple> Sign In </MDBBtn>
                             <div className="text-center">
-                                <p className="mb-0">Forgot your password? <Link to="/resetPassword">reset password</Link></p>
+                                <p className="mb-0">Forgot your password?</p>
+                                <Link to="/resetPassword">Reset Password</Link> or <Link to="/signup">SignUp Here</Link>
                             </div>
                         </form>
                     </MDBCardBody>

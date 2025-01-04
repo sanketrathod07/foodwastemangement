@@ -13,6 +13,7 @@ import {
   faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import Badge from "react-bootstrap/Badge";
+import toast from 'react-hot-toast';
 
 export default function NavigationBar({ cartItemsCount }) {
   const token = localStorage.getItem("token");
@@ -24,6 +25,7 @@ export default function NavigationBar({ cartItemsCount }) {
       localStorage.removeItem("token");
       navigate("/");
     }
+    toast.success('Sign Out Successfully!')
   };
 
   return (

@@ -47,7 +47,7 @@ function PasswordReset() {
                 onChange={handleChange}
                 id="email"
               />
-              <MDBBtn className="mb-4 w-100 gradient-custom-4" size="lg" type="submit">
+              <MDBBtn className="mb-4 w-100 gradient-custom-4" size="lg" type="submit" noRipple>
                 Reset Password
               </MDBBtn>
               <div className="text-center">

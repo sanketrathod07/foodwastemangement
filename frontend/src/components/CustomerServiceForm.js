@@ -58,7 +58,7 @@ function CustomerServiceForm() {
                                 onChange={handleChange}
                                 id="inquiry"
                             />
-                            <MDBBtn className="submit-btn w-100" size="lg" type="submit">
+                            <MDBBtn className="submit-btn w-100" size="lg" type="submit" noRipple>
                                 Submit Inquiry
                             </MDBBtn>
                         </form>

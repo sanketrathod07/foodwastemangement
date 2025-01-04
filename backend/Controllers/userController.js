@@ -41,11 +41,10 @@ const postUser = async (req, res) => {
         }
 
         // Proceed with saving other user information (including optional file path)
-        const { userName, email, dob, phoneNumber, address, password } = req.body;
+        const { userName, email, phoneNumber, address, password } = req.body;
         const newUser = new User({
             userName: userName,
             email: email,
-            dob: dob,
             phoneNumber: phoneNumber,
             address: address,
             password: password,

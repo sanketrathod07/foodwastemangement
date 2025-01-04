@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Checkout.css'
+import toast from 'react-hot-toast';
 
 function Checkout({ selectedItems, clearCart }) {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -37,6 +38,7 @@ function Checkout({ selectedItems, clearCart }) {
       navigate("/orders");
     } finally {
       setIsLoading(false);
+      toast.success('Order Placed! Check Order Section 🏹')
     }
   };
 
@@ -88,6 +90,7 @@ function Checkout({ selectedItems, clearCart }) {
                   size="lg"
                   onClick={onSubmitOrder}
                   disabled={isLoading}
+                  noRipple
                 >
                   {isLoading ? "Processing..." : "Submit Order"}
                 </MDBBtn>

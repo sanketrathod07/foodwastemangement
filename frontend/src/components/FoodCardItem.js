@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Show from "./Show";
+import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
@@ -19,6 +20,11 @@ const FoodCardItem = ({ foodItem, handleAddToCart }) => {
       ★
     </span>
   ));
+
+  const handleAddToCartWithToast = (foodItem) => {
+    handleAddToCart(foodItem); // Call the passed handleAddToCart function
+    toast.success('Added To Cart!')
+  };
 
   return (
     <Card
@@ -86,7 +92,7 @@ const FoodCardItem = ({ foodItem, handleAddToCart }) => {
             alignItems: "center",
             justifyContent: 'center',
           }}
-          onClick={() => handleAddToCart(foodItem)}
+          onClick={() => handleAddToCartWithToast(foodItem)}
         >
           <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight: "10px" }} />
           Add to Cart

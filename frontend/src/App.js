@@ -20,6 +20,7 @@ import { Orders } from "./components/Orders";
 import axios from 'axios';
 import Home from "./components/Home";
 import DonatePage from "./components/Donate/Donate";
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
   const [restaurants, setRestaurants] = useState([]);
@@ -68,7 +69,6 @@ function App() {
   };
 
   const handleAddToCart = async (item) => {
-
     try {
       // Ensure the product can be added regardless of restaurant-based dependencies
       const existingItem = selectedItems.find((x) => x._id === item._id);
@@ -105,6 +105,10 @@ function App() {
         minHeight: "100vh",
       }}
     >
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+      />
       <BrowserRouter>
         <NavigationBar cartItemsCount={getItemsCount()} />
         <Routes>
