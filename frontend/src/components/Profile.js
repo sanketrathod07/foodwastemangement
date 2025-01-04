@@ -9,7 +9,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
 function Profile() {
-  const url = 'http://localhost:8022/api/users';
+  const url = `${process.env.REACT_APP_API_URL}/api/users`;
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState(null);
   const [show, setShow] = useState(false);
@@ -27,7 +27,6 @@ function Profile() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log(token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -69,12 +68,12 @@ function Profile() {
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       const token = localStorage.getItem("token");
-  
+
       if (token) {
         const headers = {
           Authorization: `Bearer ${token}`,
         };
-  
+
         axios
           .delete(`${url}/${userId}`, { headers })
           .then(() => {
@@ -88,7 +87,7 @@ function Profile() {
           });
       }
     }
-  };  
+  };
 
   return (
     <>
@@ -103,10 +102,6 @@ function Profile() {
             <div className="user-detail">
               <h6>Email:</h6>
               <Card.Text>{user.email}</Card.Text>
-            </div>
-            <div className="user-detail">
-              <h6>Date of Birth:</h6>
-              <Card.Text>{user.dob}</Card.Text>
             </div>
             <div className="user-detail">
               <h6>Phone Number:</h6>
@@ -140,6 +135,7 @@ function Profile() {
               <Form.Control
                 type="text"
                 placeholder={user.userName}
+                value={user.userName}
                 onChange={handleChange}
                 id="userName"
               />
@@ -149,24 +145,18 @@ function Profile() {
               <Form.Control
                 type="email"
                 placeholder={user.email}
+                value={user.email}
                 onChange={handleChange}
                 id="email"
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Date of Birth</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={user.dob}
-                onChange={handleChange}
-                id="dob"
-              />
-            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="text"
                 placeholder={user.phoneNumber}
+                value={user.phoneNumber}
                 onChange={handleChange}
                 id="phoneNumber"
               />
@@ -176,6 +166,7 @@ function Profile() {
               <Form.Control
                 type="text"
                 placeholder={user.address}
+                value={user.address}
                 onChange={handleChange}
                 id="address"
               />

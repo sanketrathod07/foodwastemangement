@@ -43,12 +43,6 @@
   font-family: Arial, sans-serif;
 }
 
-.navigation {
-  background-color: white;
-  color: white;
-  padding: 0 2rem;
-  margin-bottom: 2rem;
-}
 
 .App-header {
   background-color: #282c34;
@@ -94,86 +88,196 @@
 }
 
 
-
+/* General Styles */
 body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
   margin: 0;
-  font-family: "Arial", sans-serif;
+  padding: 0;
 }
 
+/* Container for List of Restaurants */
 .list-of-restaurants {
   display: flex;
   flex-direction: column;
-  height: 80vh;
-  background-color: #f9f9f9;
+  min-height: 100vh;
+  background-color: #fafafa;
 }
 
-.navbar {
-  height: 10vh;
-  background: linear-gradient(135deg, #6ab7d6, #84fab0);
+/* Header Section */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0;
+  color: #333;
+}
+
+.content {
+  padding: 20px;
+}
+
+/* Restaurant and Product List Styles */
+.restaurant-list,
+.product-list {
+  margin-bottom: 40px;
+}
+
+/* Card Grid Layout for Restaurants and Products */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  margin: 0rem 4rem;
+
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Restaurant Card Styles */
+.restaurant-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Food Card Styles */
+.food-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.food-card:hover {
+  transform: translateY(-5px);
+}
+
+.food-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Buttons and Links */
+.button {
+  padding: 10px 20px;
+  background-color: #4caf50;
   color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+/* Loading and Error Messages */
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 50px;
+  color: #ff5c5c;
+}
+
+
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #cbffde, #e2f5ff);
+  padding: 0px 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0rem 3rem;
+}
+
+.logo img {
+  width: 60px;
+  height: auto;
+}
+
+.nav-links,
+.auth-links {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 40px;
 }
 
-.title {
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #000000;
+  text-decoration: none;
+  font-size: 19px;
+}
+
+.nav-links a:hover,
+.auth-links a:hover,
+.signout-btn:hover {
+  text-decoration: underline;
+}
+
+.auth-links a,
+.signout-btn {
+  color: #000000;
+  font-size: 19px;
+  cursor: pointer;
+  font-weight: 700;
   margin: 0;
 }
 
-.filters {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px;
-  background-color: white;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+.signout-btn {
+  background: none;
+  border: none;
+  outline: none;
 }
 
-.filter-dropdown {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-}
+.badge {
+  background-color: #e74c3c;
+  color: white;
+  position: relative;
+  left: -13px;
+  font-size: 11px;
+  padding: 4px;
+  top: -9px;
 
-.restaurant-list {
-  flex: 1;
-  padding: 20px;
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  background-color: #f1f1f1;
 }
 
 
-/* General layout adjustments for the search bar */
-.search-bar {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 10px;
-}
 
-/* Styling for the input field */
-.search-input {
-  border-radius: 0;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  padding: 10px;
-}
 
-/* Styling for the search button */
-.search-button {
-  background-color: #007bff;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border: 1px solid #007bff;
-  font-size: 16px;
-}
-
-.search-button:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+.food-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }

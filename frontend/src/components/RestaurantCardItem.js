@@ -9,7 +9,7 @@ const RestaurantCardItem = ({ restaurant, details }) => {
   const navigate = useNavigate();
 
   const showRestaurantItems = () => {
-    navigate(`/restaurant/${restaurant._id}/products`);
+    // navigate(`/restaurant/${restaurant._id}/products`);
   };
 
   const showRestaurantDetails = () => {

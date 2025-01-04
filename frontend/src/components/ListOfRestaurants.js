@@ -1,84 +1,74 @@
 import React, { useState, useEffect } from "react";
 import RestaurantCardItem from "./RestaurantCardItem";
-import SearchBar from "./SearchBar";
+import FoodCardItem from "./FoodCardItem";
 import axios from "axios";
 import "@picocss/pico";
 import { getUserRole } from "./UserRole";
+import Loader from "./Loader/Loader";
 
-export default function ListOfRestaurants() {
+export default function ListOfRestaurants({ handleAddToCart }) {
   const [restaurants, setRestaurants] = useState([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [uniqueLocations, setUniqueLocations] = useState([]);
-  const [minRatingFilter, setMinRatingFilter] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [locationFilter, setLocationFilter] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const role = getUserRole();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8022/api/restaurants");
-        setRestaurants(response.data.restaurants);
+        // Fetching all restaurants
+        const restaurantResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/restaurants`);
+        setRestaurants(restaurantResponse.data.restaurants);
+
+        // Fetching all products
+        const productResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/products`);
+        setProducts(productResponse.data.products);
       } catch (error) {
+        setError("Error fetching data");
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setFilteredRestaurants(
-      restaurants.filter(
-        (restaurant) =>
-          restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          (locationFilter === "" || restaurant.location === locationFilter) &&
-          restaurant.rating >= minRatingFilter
-      )
-    );
-  }, [restaurants, searchTerm, locationFilter, minRatingFilter]);
-
-  useEffect(() => {
-    const locations = restaurants.map((restaurant) => restaurant.location);
-    const uniqueLocations = Array.from(new Set(locations));
-    setUniqueLocations(uniqueLocations);
-  }, [restaurants]);
+  if (loading) return <Loader />;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="list-of-restaurants">
-      <div className="filters">
-        <SearchBar onSearch={(term) => setSearchTerm(term)} />
-        <select
-          className="filter-dropdown"
-          onChange={(e) => setLocationFilter(e.target.value)}
-        >
-          <option value="">All Locations</option>
-          {uniqueLocations.map((location) => (
-            <option key={location} value={location}>
-              {location}
-            </option>
-          ))}
-        </select>
-        <select
-          className="filter-dropdown"
-          onChange={(e) => setMinRatingFilter(parseFloat(e.target.value))}
-        >
-          <option value="">All Ratings</option>
-          {[1, 2, 3, 4, 5].map((rating) => (
-            <option key={rating} value={rating}>
-              {rating} Stars
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="restaurant-list">
-        {filteredRestaurants.length > 0 ? (
-          filteredRestaurants.map((restaurant) => (
-            <RestaurantCardItem key={restaurant._id} restaurant={restaurant} />
-          ))
-        ) : (
-          <p>No restaurants match the filters</p>
-        )}
+      <div className="content">
+        <h1>Welcome to the Donation Explorer</h1>
+
+        {/* Render all Products */}
+        <section className="product-list">
+          <h2>Donate Products</h2>
+          {products.length > 0 ? (
+            <div className="card-grid">
+              {products.map((foodItem) => (
+                <FoodCardItem key={foodItem._id} foodItem={foodItem} handleAddToCart={handleAddToCart} />
+              ))}
+            </div>
+          ) : (
+            <p>No products available</p>
+          )}
+        </section>
+
+        {/* Render all Restaurants */}
+        <section className="restaurant-list">
+          <h2>Explore Local Restaurants</h2>
+          {restaurants.length > 0 ? (
+            <div className="card-grid">
+              {restaurants.map((restaurant) => (
+                <RestaurantCardItem key={restaurant._id} restaurant={restaurant} />
+              ))}
+            </div>
+          ) : (
+            <p>No restaurants available</p>
+          )}
+        </section>
       </div>
     </div>
   );

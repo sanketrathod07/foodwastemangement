@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBInput } from "mdb-react-ui-kit";
 import axios from "axios";
+import "./CustomerServiceForm.css"; // Import the CSS file for styling
 
 function CustomerServiceForm() {
-    const url = "http://localhost:8022/api/customerservices"; // Update the API endpoint for customer service
+    const url = `${process.env.REACT_APP_API_URL}/api/customerservices`; // Update the API endpoint for customer service
     const [customerInquiry, setCustomerInquiry] = useState({ name: "", email: "", inquiry: "" });
     const navigate = useNavigate();
 
@@ -17,8 +18,6 @@ function CustomerServiceForm() {
         axios
             .post(url, customerInquiry)
             .then((response) => {
-                console.log(response.data);
-                // Handle response...
                 alert("Request submitted! We will get back to you as soon as possible.");
                 navigate("/");
             })
@@ -28,16 +27,15 @@ function CustomerServiceForm() {
     };
 
     return (
-        <div style={{ height: '100vh', width: '100vw', backgroundSize: 'cover', backgroundPosition: 'center center' }}>
-            <MDBContainer fluid className="d-flex align-items-center justify-content-center bg-image">
-                <div className="mask gradient-custom-3"></div>
-                <MDBCard className="m-5" style={{ maxWidth: "600px" }}>
-                    <MDBCardBody className="px-5">
-                        <h2 className="text-uppercase text-center mb-5">Customer Service Inquiry</h2>
+        <div className="customer-service-form">
+            <MDBContainer fluid className="d-flex align-items-center justify-content-center">
+                <MDBCard className="form-card">
+                    <MDBCardBody className="form-card-body">
+                        <h2 className="form-title text-center">Customer Service Inquiry</h2>
                         <form onSubmit={handleSubmit}>
                             <MDBInput
-                                wrapperClass="mb-4"
                                 label="Your Name"
+                                wrapperClass="mb-4"
                                 size="lg"
                                 placeholder="Enter your name"
                                 onChange={handleChange}
@@ -60,7 +58,9 @@ function CustomerServiceForm() {
                                 onChange={handleChange}
                                 id="inquiry"
                             />
-                            <MDBBtn className="mb-4 w-100 gradient-custom-4" size="lg" type="submit">Submit Inquiry</MDBBtn>
+                            <MDBBtn className="submit-btn w-100" size="lg" type="submit">
+                                Submit Inquiry
+                            </MDBBtn>
                         </form>
                     </MDBCardBody>
                 </MDBCard>

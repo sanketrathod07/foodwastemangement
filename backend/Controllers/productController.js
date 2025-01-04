@@ -4,18 +4,19 @@ const Restaurant = require("../models/Restaurant");
 // Get all products
 const getProducts = async (request, response) => {
   try {
-    const products = await Product.find().populate('restaurant');
+    const products = await Product.find();
     response.status(200).json({ products: products });
   } catch (error) {
     response.status(500).json({ msg: "Error on getting products" });
   }
 };
 
+
 // Get one product
 const getOneProduct = async (req, res) => {
   const id = req.params.id;
   try {
-    const foundProduct = await Product.findById(id).populate('restaurant');
+    const foundProduct = await Product.findById(id);
     if (foundProduct) {
       res.status(200).json({ product: foundProduct });
     } else {
@@ -28,39 +29,31 @@ const getOneProduct = async (req, res) => {
 
 // Post one product
 const postProduct = async (req, res) => {
+  const { name, description, rating, price, quantity, image } = req.body;
+
+  if (!quantity || !image) {
+    return res.status(400).json({ msg: 'Quantity and image are required fields.' });
+  }
+
   try {
-    const { name, description, rating, price, qte, image, availability, restaurantId } = req.body;
-    console.log("Received restaurantId:", restaurantId);
-
-    // Fetch restaurant by the provided restaurantId
-    const restaurant = await Restaurant.findOne({ _id: restaurantId });  // Use findOne instead of find
-
-    console.log("Found restaurant:", restaurant);
-
-    if (!restaurant) {
-      return res.status(404).json({ msg: "No restaurant found with the given ID" });
-    }
-
     const newProduct = new Product({
-      name: name,
-      description: description,
-      rating: rating,
-      price: price,
-      qte: qte,
-      image: image,
-      availability: availability,
+      name,
+      description,
+      rating,
+      price,
+      quantity,
+      image,
     });
 
-    restaurant.products.push(newProduct);  // Push new product to the restaurant's product list
-    await restaurant.save();
     await newProduct.save();
-
     res.status(201).json(newProduct);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error while creating product.");
   }
 };
+
+
 
 // Update one product
 const putProduct = async (req, res) => {
@@ -73,6 +66,7 @@ const putProduct = async (req, res) => {
     res.status(500).json({ msg: "Server error while creating product.", error: error.message });
   }
 };
+
 
 // Delete one product
 const deleteProduct = async (req, res) => {

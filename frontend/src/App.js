@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get("http://localhost:8022/api/restaurants");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/restaurants`);
         setRestaurants(response.data.restaurants);
       } catch (error) {
         console.error("Error fetching restaurants:", error);
@@ -67,27 +67,36 @@ function App() {
     }
   };
 
-  const handleAddToCart = (item) => {
-    const acutalItem = selectedItems.find((x) => x._id === item._id);
+  const handleAddToCart = async (item) => {
 
-    if (!!acutalItem) {
-      const updatedItems = selectedItems.map((product) => {
-        if (product._id === item._id) {
-          return { ...product, qte: product.qte + 1 };
-        }
-        return product;
-      });
+    try {
+      // Ensure the product can be added regardless of restaurant-based dependencies
+      const existingItem = selectedItems.find((x) => x._id === item._id);
 
-      setSelectedItems(updatedItems);
-    } else {
-      setSelectedItems([...selectedItems, { ...item, qte: 1 }]);
+      if (existingItem) {
+        const updatedItems = selectedItems.map((product) =>
+          product._id === item._id
+            ? { ...product, qte: product.qte + 1 }
+            : product
+        );
+        setSelectedItems(updatedItems);
+      } else {
+        setSelectedItems([...selectedItems, { ...item, qte: 1 }]);
+      }
+
+    } catch (error) {
+      console.error("Error adding to cart:", error);
     }
   };
+
   const getItemsCount = () => {
     return selectedItems.reduce((acc, current) => {
       return acc + current.qte;
     }, 0);
   };
+
+  console.log("REACT_APP_API_URL", process.env.REACT_APP_API_URL);
+
 
   return (
     <div
@@ -143,12 +152,17 @@ function App() {
           />
           <Route
             path="/restaurant"
-            element={<ListOfRestaurants restaurants={restaurants} />}
+            element={<ListOfRestaurants restaurants={restaurants} handleAddToCart={handleAddToCart} />}
           />
           <Route
             path="/donate"
-            element={<DonatePage restaurants={restaurants} />}
+            element={
+              <PrivateRoute allowedRoles={['user']}>
+                <DonatePage />
+              </PrivateRoute>
+            }
           />
+
           <Route
             path="/restaurant/:id"
             element={<RestaurantCardItem restaurants={restaurants} />}
@@ -173,11 +187,13 @@ function App() {
           <Route
             path="/cart"
             element={
-              <Cart
-                selectedItems={selectedItems}
-                handleIncrement={handleIncrement}
-                handleDecrement={handleDecrement}
-              />
+              <PrivateRoute allowedRoles={['user']}>
+                <Cart
+                  selectedItems={selectedItems}
+                  handleIncrement={handleIncrement}
+                  handleDecrement={handleDecrement}
+                />
+              </PrivateRoute>
             }
           />
         </Routes>

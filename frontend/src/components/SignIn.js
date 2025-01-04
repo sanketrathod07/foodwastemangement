@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function SignIn() {
-    const url = "http://localhost:8022/api/signIn";
+    const url = `${process.env.REACT_APP_API_URL}/api/signIn`;
     const navigate = useNavigate()
     const [user, setUser] = useState({ email: "", password: "" });
     const handleChange = (e) => {
@@ -18,7 +18,6 @@ function SignIn() {
         axios
             .post(url, user)
             .then((response) => {
-                console.log(response.data);
                 const token = response.data.token;
                 localStorage.setItem("token", token);
                 if (response.data.user.role === 'user') { navigate('/profile'); }
@@ -30,7 +29,7 @@ function SignIn() {
     };
 
     return (
-        <div style={{ height: '100vh', width: '100vw', backgroundSize: 'cover', backgroundPosition: 'center center' }}>
+        <div style={{ height: '100%', width: '100%', backgroundSize: 'cover', backgroundPosition: 'center center' }}>
             <MDBContainer fluid className="d-flex align-items-center justify-content-center bg-image" >
                 <div className="mask gradient-custom-3"></div>
                 <MDBCard className="m-5" style={{ maxWidth: "600px" }}>

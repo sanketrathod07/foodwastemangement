@@ -10,10 +10,12 @@ import {
   faFileAlt,
   faUsers,
   faUser,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import Badge from "react-bootstrap/Badge";
 
 export default function NavigationBar({ cartItemsCount }) {
+  const token = localStorage.getItem("token");
   const role = getUserRole();
   const navigate = useNavigate();
 
@@ -26,73 +28,86 @@ export default function NavigationBar({ cartItemsCount }) {
 
   return (
     <nav className="navigation">
-      <ul>
-        <Link to="/">
-        <img src="/EcoEatsLogo.png" alt="Navbar" style={{ width: '100px', height: 'auto' }}/>
-        </Link>
-      </ul>
+      <div className="navbar-container">
+        {/* Logo Section */}
+        <div className="logo">
+          <Link to="/">
+            <img src="/foodwaste.png" alt="Navbar" />
+          </Link>
+        </div>
 
-      <ul>
-        {role === "user" && (
-          <>
-            <li>
-              <NavLink to="/orders"><FontAwesomeIcon icon={faBell} /></NavLink>
-            </li>
-            <li>
-              <NavLink to="/cart">
-                <FontAwesomeIcon icon={faShoppingCart} />
-                <Badge bg="danger">{cartItemsCount ?? 0}</Badge>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/customers">
-                <FontAwesomeIcon icon={faHeadset} />
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/profile">
-                <FontAwesomeIcon icon={faUser} />
-              </NavLink>
-            </li>
-          </>
-        )}
-
-        {role === "admin" && (
-          <>
-            <li>
-              <NavLink to="/customerServices">
-                <FontAwesomeIcon icon={faFileAlt} />
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/users">
-                <FontAwesomeIcon icon={faUsers} />
-              </NavLink>
-            </li>
-          </>
-        )}
-
-        <li>
-          {role ? (
-            <Link to="/" onClick={handleSignOut}>
-              Sign Out
-            </Link>
-          ) : (
+        {/* Navigation Links */}
+        <ul className="nav-links">
+          {role === "user" && (
             <>
+              <li>
+                <NavLink to="/">
+                  <FontAwesomeIcon icon={faHome} />
+                  <span>Home</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/orders">
+                  <FontAwesomeIcon icon={faBell} />
+                  <span>Orders</span>
+                </NavLink>
+              </li>
               <li>
                 <NavLink to="/cart">
                   <FontAwesomeIcon icon={faShoppingCart} />
                   <Badge bg="danger">{cartItemsCount ?? 0}</Badge>
+                  <span style={{ position: 'relative', left: '-10px' }}>Cart</span>
                 </NavLink>
               </li>
               <li>
-                <Link to="/signUp">Sign Up/In</Link>
+                <NavLink to="/customers">
+                  <FontAwesomeIcon icon={faHeadset} />
+                  <span>Support</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/profile">
+                  <FontAwesomeIcon icon={faUser} />
+                  <span>Profile</span>
+                </NavLink>
               </li>
             </>
           )}
-        </li>
-      </ul>
+          {role === "admin" && (
+            <>
+              <li>
+                <NavLink to="/customerServices">
+                  <FontAwesomeIcon icon={faFileAlt} />
+                  <span>Services</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/users">
+                  <FontAwesomeIcon icon={faUsers} />
+                  <span>Users</span>
+                </NavLink>
+              </li>
+            </>
+          )}
+        </ul>
+
+        {/* Authentication Links */}
+        <div className="auth-links">
+          {role ? (
+            <button className="signout-btn" onClick={handleSignOut}>
+              Log Out
+            </button>
+          ) : (
+            <>
+              <NavLink to="/signin">Login</NavLink>
+              <NavLink to="/cart">
+                <FontAwesomeIcon icon={faShoppingCart} />
+                <Badge bg="danger">{cartItemsCount ?? 0}</Badge>
+              </NavLink>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 }

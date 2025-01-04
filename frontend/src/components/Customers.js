@@ -4,7 +4,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 
 function Customers() {
-  const url = "http://localhost:8022/api/users";
+  const url = `${process.env.REACT_APP_API_URL}/api/users`;
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,6 @@ function Customers() {
       // Filter users with role 'user' before setting the state
       const filteredUsers = response.data.users.filter(user => user.role === 'user');
       setUsers(filteredUsers);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +25,6 @@ function Customers() {
   const handleDelete = (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       const token = localStorage.getItem("token");
-      console.log(token);
 
       if (token) {
         const headers = {
@@ -62,7 +60,7 @@ function Customers() {
             >
               {user.userName.toUpperCase()}
               <img
-                src={`http://localhost:8022/${user.profileImagePath}`}
+                src={`${process.env.REACT_APP_API_URL}/${user.profileImagePath}`}
                 style={{ maxWidth: "100px" }}
                 alt="Description"
               />

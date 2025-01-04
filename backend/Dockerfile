@@ -6,7 +6,7 @@ COPY . .
 
 RUN npm install
 
-EXPOSE 8022
+EXPOSE 8000
 
 LABEL org.opencontainers.image.source="https://github.com/emansarahafi/ecoeats"
 

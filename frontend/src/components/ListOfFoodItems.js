@@ -3,6 +3,7 @@ import FoodCardItem from "./FoodCardItem";
 import SearchBar from "./SearchBar";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Loader from "./Loader/Loader";
 
 const ListOfFoodItems = ({ handleAddToCart }) => {
   const { id } = useParams();
@@ -27,9 +28,7 @@ const ListOfFoodItems = ({ handleAddToCart }) => {
           setError("Restaurant not found");
         }
 
-        console.log("response", response);
-        console.log("selectedRestaurant", selectedRestaurant);
-        console.log("filteredFoodItems", filteredFoodItems);
+
 
       } catch (error) {
         setError("Error fetching data");
@@ -51,7 +50,7 @@ const ListOfFoodItems = ({ handleAddToCart }) => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
 
   return (

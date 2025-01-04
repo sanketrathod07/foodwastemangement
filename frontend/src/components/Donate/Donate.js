@@ -3,89 +3,102 @@ import "./Donate.css";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
+import { Spinner } from 'react-bootstrap'; // Importing Spinner component for loading indicator
+import { useNavigate } from 'react-router-dom';
 
-export default function Donate({ restaurants }) {
+
+export default function Donate() {
+
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
-        restaurantId: "",
         name: "",
         description: "",
-        address: "",
-        price: 728,
+        price: 0,
         rating: 0,
-        qte: 10,
-        image: null,
-        availability: true,
+        qte: 1,
+        image: "",
     });
 
-    // console.log("formData0", formData);
-
     const [isLoading, setIsLoading] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setFormData({ ...formData, image: file });
+    const handleFileUpload = async (e) => {
+        setIsUploadingImage(true);
+        const fileData = new FormData();
+        fileData.append("file", e.target.files[0]);
+        fileData.append("upload_preset", "foodwaste");
+
+        try {
+            const response = await axios.post(
+                "https://api.cloudinary.com/v1_1/dq8b6vgab/image/upload",
+                fileData
+            );
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                image: response.data.secure_url,
+            }));
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        } finally {
+            setIsUploadingImage(false);
+        }
     };
 
-    // const onSubmitDonate = async () => {
-
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const donationData = {
-            restaurantId: formData.restaurantId,
             name: formData.name,
             description: formData.description,
-            address: formData.address,
             rating: formData.rating,
             price: formData.price,
-            qte: formData.qte,
-            availability: formData.availability,
-            qte: formData.qte,
-            image: formData.image ? formData.image : "",
+            quantity: formData.qte,
+            image: formData.image,
         };
-        console.log("donationData", donationData)
+
+
         try {
             setIsLoading(true);
+
             const token = localStorage.getItem("token");
+            if (!token) {
+                console.error("No token found in localStorage.");
+                return;
+            }
 
-            // // Prepare FormData for file upload
-            // const data = new FormData();
-            // data.append("restaurantId", formData.restaurantId);
-            // data.append("name", formData.name);
-            // data.append("description", formData.description);
-            // data.append("address", formData.address);
-            // data.append("rating", formData.rating);
-            // data.append("price", formData.price);
-            // data.append("qte", formData.qte);
-            // data.append("availability", formData.availability);
-            // console.log("Data", data)
-            // if (formData.image) {
-            //     data.append("image", formData.image);
-            // }
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/products`,
+                donationData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
-            await axios.post("http://localhost:8022/api/products", donationData, {
-                headers: { Authorization: 'Bearer ' + token, },
-            });
+            alert("Product added successfully!");
 
-            alert("Product added to the restaurant successfully!");
+            // Reset the form
             setFormData({
-                restaurantId: "",
                 name: "",
                 description: "",
-                address: "",
                 price: 0,
                 rating: 0,
-                qte: 0,
-                image: null,
-                availability: true,
+                qte: 1,
+                image: "",
             });
+
+            navigate("/restaurant");
         } catch (error) {
             console.error("Error while adding product:", error);
             alert("Failed to add product. Please try again.");
@@ -94,37 +107,23 @@ export default function Donate({ restaurants }) {
         }
     };
 
+
+
+
+
     return (
         <div className="donate-container">
             <h2 className="donate-title">Donate Food</h2>
-            <p className="donate-subtitle">Fill in the details below to donate food from your restaurant.</p>
+            <p className="donate-subtitle">Fill in the details below to donate food.</p>
 
             <Form className="donate-form" onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Form.Label>Select Restaurant</Form.Label>
-                    <Form.Control
-                        as="select"
-                        name="restaurantId"
-                        value={formData.restaurantId}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="" disabled>Select a restaurant</option>
-                        {restaurants.map((restaurant) => (
-                            <option key={restaurant._id} value={restaurant._id}>
-                                {restaurant.name}
-                            </option>
-                        ))}
-                    </Form.Control>
-                </Form.Group>
-
                 <Form.Group>
                     <Form.Label>Food Name</Form.Label>
                     <Form.Control
                         type="text"
-                        name="name" // Changed from "foundingDate" to "name"
-                        placeholder='Enter Food Name'
-                        value={formData.name}
+                        name="name"
+                        placeholder="Enter Food Name"
+                        value={formData.name || ""}
                         onChange={handleChange}
                         required
                     />
@@ -139,18 +138,6 @@ export default function Donate({ restaurants }) {
                         onChange={handleChange}
                         rows={2}
                         placeholder="Enter a brief description"
-                        required
-                    />
-                </Form.Group>
-
-                <Form.Group>
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        placeholder="Enter address"
                         required
                     />
                 </Form.Group>
@@ -171,13 +158,44 @@ export default function Donate({ restaurants }) {
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Logo</Form.Label>
+                    <Form.Label>Price</Form.Label>
+                    <Form.Control
+                        type="number"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        placeholder="Enter price"
+                        required
+                    />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Quantity</Form.Label>
+                    <Form.Control
+                        type="number"
+                        name="qte"
+                        value={formData.qte}
+                        onChange={handleChange}
+                        placeholder="Enter quantity"
+                        required
+                    />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Upload Image</Form.Label>
                     <Form.Control
                         type="file"
-                        name="logo"
+                        name="image"
+                        onChange={handleFileUpload}
                         accept="image/*"
-                        onChange={handleFileChange}
+                        required
                     />
+                    {isUploadingImage && (
+                        <div className="uploading-status">
+                            <Spinner animation="border" size="sm" />
+                            <span>Uploading...</span>
+                        </div>
+                    )}
                 </Form.Group>
 
                 <div className="donate-button">

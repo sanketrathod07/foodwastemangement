@@ -8,15 +8,14 @@ import {
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import './Checkout.css'
+
 function Checkout({ selectedItems, clearCart }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
+
   const getTotal = () => {
-    let total = 0;
-    selectedItems.forEach((product) => {
-      total += product.price * product.qte;
-    });
-    return Math.round(total * 100) / 100;
+    return selectedItems.reduce((total, product) => total + product.price * product.qte, 0).toFixed(2);
   };
 
   const onSubmitOrder = async () => {
@@ -24,95 +23,92 @@ function Checkout({ selectedItems, clearCart }) {
       setIsLoading(true);
       const total = getTotal();
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:8022/api/orders",
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/orders`,
         {
-          products: selectedItems.map(product => product._id),
+          products: selectedItems.map((product) => product._id),
           totalPrice: total,
         },
         {
-          headers: { Authorization: 'Bearer ' + token, },
-        });
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       clearCart();
-      navigate('/orders');
+      navigate("/orders");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <MDBContainer className="py-5">
-      <div className="d-flex justify-content-between align-items-center mb-5">
-        <a href="/">Cancel and return to the website</a>
+    <MDBContainer className="checkout-container">
+      <div className="header">
+        <a href="/" className="return-link">
+          Cancel and return to the website
+        </a>
       </div>
-      <MDBRow>
-        <MDBCol md="7" lg="7" xl="6" className="mb-4 mb-md-0">
-          <h5 className="mb-0 text-success"> Total price: {getTotal()}</h5>
-          <hr />
-          <h5 className="mb-3">Thank you for using EcoEats!</h5>
-          <div>
+      <MDBRow style={{ width: '100%' }}>
+        <MDBCol md="7" lg="7" xl="8">
+          <div className="order-summary">
+            <h5 className="total-price">Total Price: ${getTotal()}</h5>
             <hr />
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="d-flex flex-row align-items-center text-primary">
-                <span className="ms-1">Add Payment card</span>
-              </div>
-            </div>
-            <div className="d-flex flex-column mb-3">
-              <MDBBtnGroup vertical aria-label="Vertical button group">
+            <h5 className="thank-you">Thank you for using EcoEats!</h5>
+            <hr />
+            <div className="payment-section">
+              <h6>Add Payment Card</h6>
+              <MDBBtnGroup vertical className="payment-options">
                 <input
                   type="radio"
                   className="btn-check"
-                  name="options"
-                  id="option1"
+                  name="paymentOptions"
+                  id="visa"
                   autoComplete="off"
                 />
-                <label className="btn btn-outline-primary btn-lg" htmlFor="option1">
-                  <div className="d-flex justify-content-between">
-                    <span>VISA </span>
-                    <span>**** 5436</span>
-                  </div>
+                <label htmlFor="visa" className="btn btn-outline-primary payment-label">
+                  <span>VISA</span>
+                  <span>**** 5436</span>
                 </label>
                 <input
                   type="radio"
                   className="btn-check"
-                  name="options"
-                  id="option2"
+                  name="paymentOptions"
+                  id="mastercard"
                   autoComplete="off"
-                  checked
+                  defaultChecked
                 />
-                <label className="btn btn-outline-primary btn-lg" htmlFor="option2">
-                  <div className="d-flex justify-content-between">
-                    <span>MASTER CARD </span>
-                    <span>**** 5038</span>
-                  </div>
+                <label htmlFor="mastercard" className="btn btn-outline-primary payment-label">
+                  <span>MASTER CARD</span>
+                  <span>**** 5038</span>
                 </label>
               </MDBBtnGroup>
+              {!!selectedItems?.length && (
+                <MDBBtn
+                  className="submit-btn"
+                  color="success"
+                  size="lg"
+                  onClick={onSubmitOrder}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Processing..." : "Submit Order"}
+                </MDBBtn>
+              )}
             </div>
-            {!!selectedItems?.length && (
-              <MDBBtn
-                color="success"
-                size="lg"
-                onClick={() => onSubmitOrder()}
-                disabled={isLoading}
-                block
-              >
-                Submit order
-              </MDBBtn>
-            )}
           </div>
         </MDBCol>
-        <MDBCol md="5" lg="4" xl="4" offsetLg="1" offsetXl="2">
-          <div className="p-3" style={{ backgroundColor: "#eee" }}>
-            <span className="fw-bold"> Recap</span>
+        <MDBCol md="5" lg="4" xl="4">
+          <div className="recap-section">
+            <h6 className="recap-title">Order Recap</h6>
             {selectedItems.map((item) => (
-              <div className="d-flex justify-content-between mt-2">
-                <span>{item.name}</span> <span>{item.qte}</span>{" "}
-                <span>${item.price * item.qte}</span>
+              <div key={item._id} className="recap-item">
+                <span className="recap-itemName">{item.name}</span>
+                <span>{item.qte}</span>
+                <span>${(item.price * item.qte).toFixed(2)}</span>
               </div>
             ))}
             <hr />
-            <div className="d-flex justify-content-between mt-2">
-              <span>Total </span>{" "}
-              <span className="text-success">${getTotal()}</span>
+            <div className="recap-total">
+              <span>Total</span>
+              <span className="total-amount">${getTotal()}</span>
             </div>
           </div>
         </MDBCol>

@@ -6,7 +6,6 @@ require('dotenv').config();
 const getUsers = async (request, response) => {
     try {
         const users = await User.find();
-        console.log(users);
         response.status(200).json({ users: users });
     } catch (error) {
         response.status(500).json({ msg: "Error on getting users" });
@@ -66,7 +65,6 @@ const postUser = async (req, res) => {
 const putUser = async (req, res) => {
     const id = req.params.id;
     const user = req.body;
-    console.log(user);
     try {
         await User.findByIdAndUpdate(id, user);
         res.status(200).json({ msg: "Update success" });

@@ -1,15 +1,26 @@
+import { jwtDecode } from "jwt-decode";
 import React from "react";
-import { Navigate } from "react-router-dom"; 
-import { getUserRole} from "./UserRole";
-function PrivateRoute({ children, allowedRoles }) { 
-    const role = getUserRole();
-    if (role) {
-        return (
-            <div> { allowedRoles.includes(role) ? children  :<Navigate to="/" /> } </div>
-        )
-    } else {
-        // No valid token or role, redirect to the login page
-        return <Navigate to="/signIn" />; // Adjust the redirect route as needed 
+import { Navigate, useLocation } from "react-router-dom";
+
+function PrivateRoute({ children, allowedRoles }) {
+    const token = localStorage.getItem("token");
+    const location = useLocation();
+
+    if (!token) {
+        // If no token, redirect to signIn page
+        return <Navigate to="/signIn" state={{ from: location }} replace />;
     }
+
+    // Optionally: You can decode the token to check the user's role if needed
+    const decodedToken = jwtDecode(token);
+    const userRole = decodedToken.role;
+
+    if (!allowedRoles.includes(userRole)) {
+        // If the user doesn't have permission, you can redirect to a forbidden page
+        return <Navigate to="/forbidden" replace />;
+    }
+
+    return children;
 }
+
 export default PrivateRoute;

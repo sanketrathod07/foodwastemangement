@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function SignUp() {
-  const url = "http://localhost:8022/api/users/uploads";
+  const url = `${process.env.REACT_APP_API_URL}/api/users/uploads`;
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -47,10 +47,7 @@ function SignUp() {
     formData.append("phoneNumber", user.phoneNumber);
     formData.append("address", user.address);
     formData.append("password", user.password);
-    // Log FormData contents
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
+
 
 
     if (image) {
