@@ -58,7 +58,7 @@ function SignUp() {
     try {
       const response = await axios.post(url, formData);
       console.log(response.data);
-      alert("Welcome to EcoEats! Please sign in to confirm your credentials.");
+      alert("Welcome to Food Waste Management! Please sign in to confirm your credentials.");
       navigate("/signIn");
     } catch (error) {
       if (error.response) {

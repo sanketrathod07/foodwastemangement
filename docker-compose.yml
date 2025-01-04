@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   backend:
@@ -17,8 +17,8 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"  
-        max-file: "3"    
+        max-size: "10m"
+        max-file: "3"
 
   frontend:
     image: ecoeats-frontend:latest
@@ -52,8 +52,8 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"  
-        max-file: "3"    
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   mongo_data:

@@ -52,7 +52,7 @@ function Checkout({ selectedItems, clearCart }) {
           <div className="order-summary">
             <h5 className="total-price">Total Price: ${getTotal()}</h5>
             <hr />
-            <h5 className="thank-you">Thank you for using EcoEats!</h5>
+            <h5 className="thank-you">Thank you for using Food Waste Management!</h5>
             <hr />
             <div className="payment-section">
               <h6>Add Payment Card</h6>
