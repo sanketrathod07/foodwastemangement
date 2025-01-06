@@ -52,7 +52,7 @@ function Checkout({ selectedItems, clearCart }) {
       <MDBRow style={{ width: '100%' }}>
         <MDBCol md="7" lg="7" xl="8">
           <div className="order-summary">
-            <h5 className="total-price">Total Price: ${getTotal()}</h5>
+            <h5 className="total-price">Total Price: ₹{getTotal()}</h5>
             <hr />
             <h5 className="thank-you">Thank you for using Food Waste Management!</h5>
             <hr />
@@ -111,7 +111,7 @@ function Checkout({ selectedItems, clearCart }) {
             <hr />
             <div className="recap-total">
               <span>Total</span>
-              <span className="total-amount">${getTotal()}</span>
+              <span className="total-amount">₹{getTotal()}</span>
             </div>
           </div>
         </MDBCol>

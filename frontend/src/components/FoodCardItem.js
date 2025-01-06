@@ -73,7 +73,7 @@ const FoodCardItem = ({ foodItem, handleAddToCart }) => {
               marginBottom: "10px",
             }}
           >
-            Price: {foodItem?.price} $
+            Price: {foodItem?.price} ₹
           </Card.Text>
           <div style={{ marginBottom: "10px" }}>{stars}</div>
         </div>

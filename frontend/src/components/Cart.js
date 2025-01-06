@@ -41,10 +41,10 @@ const Cart = ({ selectedItems, handleIncrement, handleDecrement }) => {
                     <div className="cart-item-info">
                       <h5 className="cart-item-name">{item.name}</h5>
                       <p className="cart-item-price">
-                        Unit Price: <strong>${item.price}</strong>
+                        Unit Price: <strong>₹{item.price}</strong>
                       </p>
                       <p className="cart-item-total">
-                        Total: <strong>${item.price * item.qte}</strong>
+                        Total: <strong>₹{item.price * item.qte}</strong>
                       </p>
                     </div>
                   </div>
@@ -68,7 +68,7 @@ const Cart = ({ selectedItems, handleIncrement, handleDecrement }) => {
             </ListGroup>
 
             <div className="cart-summary">
-              <h5 style={{ color: "black" }}>Total Price: ${getTotal()}</h5>
+              <h5 style={{ color: "black" }}>Total Price: ₹{getTotal()}</h5>
               <Button
                 variant="primary"
                 onClick={NavigateCheckout}
